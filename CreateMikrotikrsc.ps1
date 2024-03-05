@@ -1,12 +1,12 @@
+
 $defaultArr = @(
 ($portSsh = 22),
-($portTelnet = 21),
+($portTelnet = 23),
 ($portWww = 80),
 ($portWwwSsl = 443),
 ($portApi = 8728),
 ($portApiSsl = 8729),
-($portFtp = 21),
-($inInterLocal = "ether2")
+($portFtp = 21)
 )
 
 $userInputArr = @(
@@ -16,13 +16,15 @@ $userInputArr = @(
 ("Port Www SSL",$usrPortWwwSsl),
 ("Port Api",$usrPortApi),
 ("Port Api SSL",$usrPortApiSsl),
-("Port Ftp",$usrPortFtp),
-("Nama Interface pada mikrotik yang tersambung ke local Lan",$usrInInterLocal)
+("Port Ftp",$usrPortFtp)
 )
+Write-Output "============================================="
 Write-Output "Masukan Input Port & Nama Interface"
+Write-Output "============================================="
 For ($x=0;$x -lt $userInputArr.length; $x++){
     Write-Output "$($userInputArr[$x][0]) : "
     if(($userInputArr[$x][1] = Read-Host "Press enter to accept default value $($defaultArr[$x])") -eq ''){$userInputArr[$x][1]=$defaultArr[$x]}
+    Write-Output "-------------------------------"
 }
 Invoke-Expression clear
 Write-Output "Daftar Port & Nama Interface"
@@ -37,11 +39,14 @@ $script = @"
 set allowed-interface-list=none
 mac-winbox set allowed-interface-list=none
 
-/ip firewall raw
-add action=drop chain=prerouting content=youtube.com in-interface=$($userInputArr[7][1]) comment="Drop Youtube"
-add action=drop chain=prerouting content=instagram.com in-interface=$($userInputArr[7][1]) comment="Drop IG"
-add action=drop chain=prerouting content=tiktok.com in-interface=$($userInputArr[7][1]) comment="Drop Tiktok"
-add action=drop chain=prerouting content=facebook.com in-interface=$($userInputArr[7][1]) comment="Drop FB"
+/ip service
+ssh port=$($userInputArr[0][1]) disabled=yes
+telnet port=$($userInputArr[1][1]) disabled=yes
+www port=$($userInputArr[2][1]) disabled=yes
+www-ssl port=$($userInputArr[3][1]) disabled=yes
+api port=$($userInputArr[4][1]) disabled=yes
+api-ssl port=$($userInputArr[5][1]) disabled=yes
+ftp port=$($userInputArr[6][1]) disabled=yes
 
 /ip neighbor discovery-settings set discover-interface-list=none
 
