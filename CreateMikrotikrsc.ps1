@@ -38,6 +38,11 @@ $script = @"
 /tool mac-server
 set allowed-interface-list=none
 mac-winbox set allowed-interface-list=none
+ping set enabled=no
+
+/ip neighbor discovery-settings set discover-interface-list=none
+/tool bandwidth-server set enabled=no
+/ip dns set allow-remote-requests=no
 
 /ip service
 ssh port=$($userInputArr[0][1]) disabled=yes
@@ -47,11 +52,6 @@ www-ssl port=$($userInputArr[3][1]) disabled=yes
 api port=$($userInputArr[4][1]) disabled=yes
 api-ssl port=$($userInputArr[5][1]) disabled=yes
 ftp port=$($userInputArr[6][1]) disabled=yes
-
-/ip neighbor discovery-settings set discover-interface-list=none
-
-/tool bandwidth-server set enabled=no
-/ip dns set allow-remote-requests=no
 
 /ip proxy set enabled=no
 /ip socks set enabled=no
